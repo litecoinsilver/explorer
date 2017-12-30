@@ -100,6 +100,12 @@ app.use('/ext/getlasttxs/:min', function(req,res){
   });
 });
 
+app.use('/ext/getlastblocks', function(req,res){
+    db.get_last_blocks((req.query.limit * 1.0), function(blocks){
+        res.send({data: blocks});
+    });
+});
+
 app.use('/ext/connections', function(req,res){
   db.get_peers(function(peers){
     res.send({data: peers});
