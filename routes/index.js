@@ -8,7 +8,8 @@ var express = require('express')
 
 function route_get_block(res, blockhash) {
   lib.get_block(blockhash, function (block) {
-    if (block != 'There was an error. Check your console.') {
+    if (block) {
+      console.log(block);
       if (blockhash == settings.genesis_block) {
         res.render('block', { active: 'block', block: block, confirmations: settings.confirmations, txs: 'GENESIS'});
       } else {
@@ -46,7 +47,7 @@ function route_get_tx(res, txid) {
         });
       }
       else {
-        lib.get_rawtransaction(txid, function(rtx) {
+        lib.get_rtx_cached(txid, function(rtx) {
           if (rtx.txid) {
             lib.prepare_vin(rtx, function(vin) {
               lib.prepare_vout(rtx.vout, rtx.txid, vin, function(rvout, rvin) {
